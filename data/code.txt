@@ -1,0 +1,14 @@
+        private string[] mergeSort(string[] v)
+        {
+            if (v.Length <= 1) return v;
+            int middle = v.Length / 2;
+            string[] v1 = v.Skip(0)
+                    .Take(middle)
+                    .ToArray();
+            mergeSort(v1);
+            string[] v2 = v.Skip(middle)
+                .Take(v.Length-middle)
+                .ToArray();
+            mergeSort(v2);
+            return merge(v1, v2);
+  

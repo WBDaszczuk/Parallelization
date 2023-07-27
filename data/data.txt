@@ -1,0 +1,96 @@
+https://zenodo.org/record/3360392
+Text files from Gutenberg database
+2207.txt - ok. 72MB
+
+        private static string[] mergeSort(string[] v)
+        {
+            if (v.Length <= 1) return v;
+            int middle = v.Length / 2;
+            string[] v1 = v.Skip(0).Take(middle).ToArray();
+            v1 = mergeSort(v1);
+            string[] v2 = v.Skip(middle).Take(v.Length - middle).ToArray();
+            v2 = mergeSort(v2);
+            return merge(v1, v2);
+	}
+
+        static string[] v1s;
+        private static void mergeSortThread()
+        {
+            v1s = mergeSort(v1s);
+        }
+
+        private static string[] mergeSortParallel(string[] v)
+        {
+            if (v.Length <= 1) return v;
+            int middle = v.Length / 2;
+            v1s = v.Skip(0).Take(middle).ToArray();
+            Thread thread = new Thread(new ThreadStart(mergeSortThread));
+            thread.Start();
+            string[] v2 = v.Skip(middle).Take(v.Length - middle).ToArray();
+            v2 = mergeSort(v2);
+            thread.Join();
+            return merge(v1s, v2);
+        }
+
+        static string[] v1g, v2g, v3g, v4g;
+        private static void mergeSortMember1()
+        {
+            v1g = mergeSort(v1g);
+        }
+        private static void mergeSortMember2()
+        {
+            v2g = mergeSort(v2g);
+        }
+        private static void mergeSortMember3()
+        {
+            v3g = mergeSort(v3g);
+        }
+        private static void mergeSortMember4()
+        {
+            v4g = mergeSort(v4g);
+        }
+
+
+        private static string[] mergeSortGang(string[] v, int part)
+        {
+            //if (v.Length <= 1) return v;
+            //if (v.Length <= 3) return mergeSortParallel(v);
+            //int part = v.Length / 4;
+            v1g = v.Skip(0).Take(part).ToArray();
+	    mergeSortMember1;
+            v2g = v.Skip(part).Take(part).ToArray();
+            mergeSortMember2;
+            v3g = v.Skip(part*2).Take(part).ToArray();
+            mergeSortMember3;
+            v4g = v.Skip(part*3).Take(v.Length-3*part).ToArray();
+            mergeSortMember4;
+            v1g=merge(v1g,v2g);
+            v3g=merge(v3g,v4g);
+            return merge(v1g, v3g);
+        }
+
+        private static string[] mergeSortGang(string[] v, int part)
+        {
+            //if (v.Length <= 1) return v;
+            //if (v.Length <= 3) return mergeSortParallel(v);
+            //int part = v.Length / 4;
+            v1g = v.Skip(0).Take(part).ToArray();
+            Thread thread1 = new Thread(new ThreadStart(mergeSortMember1));
+            thread1.Start();
+            v2g = v.Skip(part).Take(part).ToArray();
+            Thread thread2 = new Thread(new ThreadStart(mergeSortMember2));
+            thread2.Start();
+            v3g = v.Skip(part*2).Take(part).ToArray();
+            Thread thread3 = new Thread(new ThreadStart(mergeSortMember3));
+            thread3.Start();
+            v4g = v.Skip(part*3).Take(v.Length-3*part).ToArray();
+            Thread thread4 = new Thread(new ThreadStart(mergeSortMember4));
+            thread4.Start();
+            thread1.Join();
+            thread2.Join();
+            thread3.Join();
+            thread4.Join();
+            v1g=merge(v1g,v2g);
+            v3g=merge(v3g,v4g);
+            return merge(v1g, v3g);
+        }
