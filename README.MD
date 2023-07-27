@@ -1,2 +1,2 @@
 # Parallel
-Example program subject to parallelization.
+Example sequential program subject to parallelization.
